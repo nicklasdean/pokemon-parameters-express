@@ -30,16 +30,18 @@ app.get('/',(req, res) => {
     });
 });
 
-app.get('/single',(req, res)=>{
-    const requestParameter = req.query.name;
 
-    connection.query('SELECT * FROM pokemon WHERE name ="' + requestParameter +"\"",(error,results) => {
-        res.send(requestParameter);
+//Unsafe way - will allow SQL injections
+app.get('/single',(req, res)=>{
+    const requestParameter = req.query.name; // "Charizard"
+
+    connection.query('SELECT * FROM pokemon WHERE name ="' + requestParameter + "\"",(error,results) => {
+        res.send(results);
     });
 });
 
-/*
-app.get('/single', (req, res) => {
+//Safe way - will not allow SQL injections
+app.get('/single-safe', (req, res) => {
     const requestParameter = req.query.name;
 
     connection.query(
@@ -50,7 +52,6 @@ app.get('/single', (req, res) => {
         }
     );
 });
-*/
 
 app.listen(port, () =>{
     console.log(`Application is now running on port ${port}`);
